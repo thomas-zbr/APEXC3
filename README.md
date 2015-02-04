@@ -16,8 +16,8 @@ Download and install as APEX plugin:
 
 - region_type_plugin_tz_c3_charts.sql
 
-Open the uploaded plugin in Oracle APEX (shared components) and override in "settings" the default "file prefix" with:
+Open the uploaded plugin in Oracle APEX (shared components) and replace "#PLUGIN_PREFIX#" within "settings" with your own folder:
 
-'#IMAGE_PREFIX#your_folder/
+"#IMAGE_PREFIX#your_folder/"
 
 Replace "your_folder" with your individual path to where you have uploaded the files from "productive".
