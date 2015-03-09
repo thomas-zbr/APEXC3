@@ -53,7 +53,7 @@ prompt  Set Application ID...
 begin
  
    -- SET APPLICATION ID
-   wwv_flow.g_flow_id := nvl(wwv_flow_application_install.get_application_id,236);
+   wwv_flow.g_flow_id := nvl(wwv_flow_application_install.get_application_id,500);
    wwv_flow_api.g_id_offset := nvl(wwv_flow_application_install.get_offset,0);
 null;
  
@@ -67,11 +67,11 @@ prompt  ...plugins
 begin
  
 wwv_flow_api.create_plugin (
-  p_id => 4724700323726361230 + wwv_flow_api.g_id_offset
+  p_id => 7145055537028202014 + wwv_flow_api.g_id_offset
  ,p_flow_id => wwv_flow.g_flow_id
  ,p_plugin_type => 'REGION TYPE'
  ,p_name => 'TZ_C3_CHARTS'
- ,p_display_name => 'TZ_APEXC3'
+ ,p_display_name => 'TZAPEXC3'
  ,p_image_prefix => '#PLUGIN_PREFIX#'
  ,p_plsql_code => 
 'function TZC3_render ('||unistr('\000a')||
@@ -110,6 +110,7 @@ wwv_flow_api.create_plugin (
 '        '||unistr('\000a')||
 'begin  '||unistr('\000a')||
 ''||unistr('\000a')||
+''||unistr('\000a')||
 '   apex_css.add_file('||unistr('\000a')||
 '         p_name      => ''c3'','||unistr('\000a')||
 '         p_directory => p_plugin.file_prefix,'||unistr('\000a')||
@@ -118,8 +119,8 @@ wwv_flow_api.create_plugin (
 ''||unistr('\000a')||
 '   apex_javascript.add_library('||unistr('\000a')||
 '      p_name      => ''d3-3.5.3.min'','||unistr('\000a')||
-'      p_directory => p_'||
-'plugin.file_prefix,'||unistr('\000a')||
+'      p_directory => p'||
+'_plugin.file_prefix,'||unistr('\000a')||
 '      p_version   => NULL'||unistr('\000a')||
 '   );'||unistr('\000a')||
 '   apex_javascript.add_library('||unistr('\000a')||
@@ -128,15 +129,17 @@ wwv_flow_api.create_plugin (
 '      p_version   => NULL'||unistr('\000a')||
 '   );'||unistr('\000a')||
 ''||unistr('\000a')||
+''||unistr('\000a')||
 '-- DEFINE NEW ROW BY ADDING A HEADER LINE FOR ALL COLUMNS:'||unistr('\000a')||
 ''||unistr('\000a')||
 '  l_column_value_list2 := apex_plugin_util.get_data2 ( '||unistr('\000a')||
 '    p_sql_statement => p_region.source, '||unistr('\000a')||
 '    p_min_columns => 2, '||unistr('\000a')||
-'    p_max_columns => 50, '||unistr('\000a')||
-' '||
-'   p_component_name => p_region.name '||unistr('\000a')||
+'    p_max_columns => 50, '||
+''||unistr('\000a')||
+'    p_component_name => p_region.name '||unistr('\000a')||
 '  );'||unistr('\000a')||
+''||unistr('\000a')||
 '  '||unistr('\000a')||
 'for l_column in 1 .. l_column_value_list2.COUNT loop  -- RUN THROUGH COLUMNS'||unistr('\000a')||
 ''||unistr('\000a')||
@@ -146,24 +149,24 @@ wwv_flow_api.create_plugin (
 '				l_this_row := ''['''''' || l_column_value_list2(l_column).name;'||unistr('\000a')||
 '				l_row(1) := l_this_row; -- ADD FINISHED ROW TO ARRAY OF ROWS'||unistr('\000a')||
 '				l_filter_chart := ''<select id="TZC3_colfi_'' || p_region.id || ''">'||unistr('\000a')||
-'					<option '||
-'value="" selected="selected">- show all -</option>'';'||unistr('\000a')||
+'					<opti'||
+'on value="" selected="selected">- show all -</option>'';'||unistr('\000a')||
 '				l_hider := '''''''' || l_column_value_list2(l_column).name || '''''''';'||unistr('\000a')||
 '				  '||unistr('\000a')||
 '		elsif l_column = l_column_value_list2.COUNT then -- COLUMN IS LAST COLUMN >> CLOSE ROW'||unistr('\000a')||
 '			'||unistr('\000a')||
 '				l_this_row := '''''', '''''' || l_column_value_list2(l_column).name || ''''''], '';'||unistr('\000a')||
 '				l_row(1) := l_row(1) || l_this_row; -- ADD FINISHED ROW TO ARRAY OF ROWS'||unistr('\000a')||
-'				l_filter_chart := l_'||
-'filter_chart || ''	<option value="'' || l_column_value_list2(l_column).name || ''">'' || l_column_value_list2(l_column).name || ''</option>'||unistr('\000a')||
+'				l_filter_chart :='||
+' l_filter_chart || ''	<option value="'' || l_column_value_list2(l_column).name || ''">'' || l_column_value_list2(l_column).name || ''</option>'||unistr('\000a')||
 '				</select>'';'||unistr('\000a')||
 ''||unistr('\000a')||
 '		else '||unistr('\000a')||
 '			'||unistr('\000a')||
 '				l_this_row := '''''', '''''' || l_column_value_list2(l_column).name;'||unistr('\000a')||
 '				l_row(1) := l_row(1) || l_this_row; -- ADD FINISHED ROW TO ARRAY OF ROWS'||unistr('\000a')||
-'				l_filter_chart := l_filter_chart || ''	<option value="'' || l_column_value_list2(l_column)'||
-'.name || ''">'' || l_column_value_list2(l_column).name || ''</option>'';'||unistr('\000a')||
+'				l_filter_chart := l_filter_chart || ''	<option value="'' || l_column_value_list2(l_colu'||
+'mn).name || ''">'' || l_column_value_list2(l_column).name || ''</option>'';'||unistr('\000a')||
 '				l_hider := l_hider || '', '''''' || l_column_value_list2(l_column).name  || '''''''';'||unistr('\000a')||
 '				'||unistr('\000a')||
 '		end if; '||unistr('\000a')||
@@ -178,9 +181,9 @@ wwv_flow_api.create_plugin (
 '	p_sql_statement => p_region.source, '||unistr('\000a')||
 '	p_min_columns => 2, '||unistr('\000a')||
 '	p_max_columns => 50, '||unistr('\000a')||
-'	p_component_name => p_region.name '||unistr('\000a')||
-' '||
-' );'||unistr('\000a')||
+'	p_component_name => p_region.name'||
+' '||unistr('\000a')||
+'  );'||unistr('\000a')||
 ''||unistr('\000a')||
 'for i in 1 .. l_value_list(1).COUNT loop -- ZEILEN'||unistr('\000a')||
 ''||unistr('\000a')||
@@ -195,28 +198,28 @@ wwv_flow_api.create_plugin (
 '				  '||unistr('\000a')||
 '			if l_column = 1 then -- COL IS FIRST ONE >> OPEN NEW ROW'||unistr('\000a')||
 '			'||unistr('\000a')||
-'					l_this_row :='||
-' ''['';'||unistr('\000a')||
+'					l_this_row'||
+' := ''['';'||unistr('\000a')||
 '					if l_column_value_list2(l_column).data_type = ''NUMBER'' '||unistr('\000a')||
 '						then l_this_row := l_this_row || replace(l_value_list(l_column)(i),'','',''.'') ||'', '';'||unistr('\000a')||
 '						else l_this_row := l_this_row || ''''''''|| l_value_list(l_column)(i) ||'''''', ''; '||unistr('\000a')||
 '					end if;'||unistr('\000a')||
 '					l_row(i+1) := l_this_row; -- ADD FINISHED ROW TO ARRAY OF ROWS'||unistr('\000a')||
 '				  '||unistr('\000a')||
-'			elsif l_column = l_column_value_list2.COUNT then -- COLUMN IS LAST CO'||
-'LUMN >> CLOSE ROW'||unistr('\000a')||
+'			elsif l_column = l_column_value_list2.COUNT then -- COLUMN IS LAST'||
+' COLUMN >> CLOSE ROW'||unistr('\000a')||
 '			'||unistr('\000a')||
 '					if l_column_value_list2(l_column).data_type = ''NUMBER'' '||unistr('\000a')||
-'						then l_this_row := replace(l_value_list(l_column)(i),'','',''.'') || '']'';'||unistr('\000a')||
+'						then l_this_row := nvl(replace(l_value_list(l_column)(i),'','',''.''),''null'') || '']'';'||unistr('\000a')||
 '						else l_this_row := ''''''''|| l_value_list(l_column)(i) || '''''']''; '||unistr('\000a')||
 '					end if;'||unistr('\000a')||
 '					l_row(i+1) := l_row(i+1) || l_this_row; -- ADD FINISHED ROW TO ARRAY OF ROWS'||unistr('\000a')||
 ''||unistr('\000a')||
-'			else  -- COL IS ORDINARY COLUMN - JUST ADD COMMA SEPARATED VALUE FROM ROW'||
-''||unistr('\000a')||
+'			else  -- COL IS ORDINARY COLUMN - JUST ADD COMMA SEPARATED'||
+' VALUE FROM ROW'||unistr('\000a')||
 '			'||unistr('\000a')||
 '					if l_column_value_list2(l_column).data_type = ''NUMBER'' '||unistr('\000a')||
-'						then l_this_row := replace(l_value_list(l_column)(i),'','',''.'') || '', '';'||unistr('\000a')||
+'						then l_this_row := nvl(replace(l_value_list(l_column)(i),'','',''.''),''null'') || '', '';'||unistr('\000a')||
 '						else l_this_row := ''''''''|| l_value_list(l_column)(i) || '''''', ''; '||unistr('\000a')||
 '					end if;'||unistr('\000a')||
 '					l_row(i+1) := l_row(i+1) || l_this_row; -- ADD FINISHED ROW TO ARRAY OF ROWS'||unistr('\000a')||
@@ -225,26 +228,28 @@ wwv_flow_api.create_plugin (
 ''||unistr('\000a')||
 '		end loop;'||unistr('\000a')||
 '			'||unistr('\000a')||
-'			l_row(i+1) := l_row(i+1) || '', '';'||unistr('\000a')||
+'			l_row(i+1) := l_row(i+1) || '||
+''', '';'||unistr('\000a')||
 '		'||unistr('\000a')||
 'end loop;'||unistr('\000a')||
 ''||unistr('\000a')||
 ''||unistr('\000a')||
 ''||unistr('\000a')||
-'-- Er'||
-'stelle das D3 Diagramm:'||unistr('\000a')||
+'-- Erstelle das D3 Diagramm:'||unistr('\000a')||
 'htp.p(l_filter_chart || ''<br /><br />'');'||unistr('\000a')||
 ''||unistr('\000a')||
 'htp.p(''<div id="TZchart_'' || p_region.id || ''" style="height: '' || nvl(p_height,400) || ''px; ">'');'||unistr('\000a')||
 'htp.p(''</div>'');'||unistr('\000a')||
 ''||unistr('\000a')||
 'htp.p(''<script>'');'||unistr('\000a')||
-'htp.p(''function TZchart_'' || p_region.id || ''_init() {'');'||unistr('\000a')||
-'htp.p(''var chart_'' || p_region.id || '' = c3.generate({'');'||unistr('\000a')||
-'htp.p(''    bindto: ''''#TZchart_'' || p_region.id || '''''','');'||unistr('\000a')||
 ''||unistr('\000a')||
-'htp.p(''data: {''); -- OP'||
-'EN DATA'||unistr('\000a')||
+'htp.p(''function TZchart_'' || p_region.id || ''_init() {'');'||unistr('\000a')||
+''||unistr('\000a')||
+'htp.p(''var chart_'' || p_region.id || '' = c3.generate({'');'||unistr('\000a')||
+'htp.p(''    bindto: ''''#TZchart_'' || p_region.id || '''''''||
+','');'||unistr('\000a')||
+''||unistr('\000a')||
+'htp.p(''data: {''); -- OPEN DATA'||unistr('\000a')||
 ''||unistr('\000a')||
 'if p_label_column is not null then '||unistr('\000a')||
 '	htp.p(''	x : '''''' || p_label_column || '''''','');  -- CHECK IF THERE IS A SELECTED NAME COLUMN - if not: x will display units'||unistr('\000a')||
@@ -259,8 +264,8 @@ wwv_flow_api.create_plugin (
 'htp.p(''		]'');'||unistr('\000a')||
 'htp.p('', type: '''''' || nvl(p_chart_type,''line'') || '''''''');'||unistr('\000a')||
 ''||unistr('\000a')||
-'-- RENDER INDIVIDUAL CHART TYPES'||
-' FOR USER DEFINED COLUMNS'||unistr('\000a')||
+'-- '||
+'RENDER INDIVIDUAL CHART TYPES FOR USER DEFINED COLUMNS'||unistr('\000a')||
 'if p_use_individual_types = ''Y'' and p_individual_types != ''your_column_name1: ''''bar'''','||unistr('\000a')||
 'your_column_name2: ''''line'''','' then '||unistr('\000a')||
 '	htp.p('', types : {'');'||unistr('\000a')||
@@ -268,9 +273,9 @@ wwv_flow_api.create_plugin (
 '	htp.p(''}''); '||unistr('\000a')||
 'end if;'||unistr('\000a')||
 '-- GROUP USER DEFINED COLUMNS (for stacked values)'||unistr('\000a')||
-'if p_individual_col_groups is not null and p_individual_col_groups != ''[''''your_column_1'''', ''''your_column_2'''']'' then '||unistr('\000a')||
-'	htp.p('', '||
-'groups : ['');'||unistr('\000a')||
+'if p_individual_col_groups is not null and p_individual_col_groups != ''[''''your_column_1'''', ''''your_'||
+'column_2'''']'' then '||unistr('\000a')||
+'	htp.p('', groups : ['');'||unistr('\000a')||
 '	htp.p(p_individual_col_groups);'||unistr('\000a')||
 '	htp.p('']'');  -- CHECK IF THERE IS A SELECTED NAME COLUMN - if not: x will display units'||unistr('\000a')||
 'end if;'||unistr('\000a')||
@@ -288,9 +293,9 @@ wwv_flow_api.create_plugin (
 ''||unistr('\000a')||
 '-- X AXIS'||unistr('\000a')||
 'if p_label_column is not null then '||unistr('\000a')||
-'htp.p(''        x: {'||unistr('\000a')||
-'            type: ''''cate'||
-'gory'''''');'||unistr('\000a')||
+'htp.p(''        '||
+'x: {'||unistr('\000a')||
+'            type: ''''category'''''');'||unistr('\000a')||
 '	if p_label_x is not null then '||unistr('\000a')||
 '		htp.p(''       , label: {'||unistr('\000a')||
 '						text: '''''' || p_label_x || '''''','||unistr('\000a')||
@@ -305,12 +310,12 @@ wwv_flow_api.create_plugin (
 '						text: '''''' || p_label_x || '''''','||unistr('\000a')||
 '						position: ''''outer-center'''''||unistr('\000a')||
 '					}'');'||unistr('\000a')||
-'htp.p(''       },'');'||unistr('\000a')||
+'htp.p(''     '||
+'  },'');'||unistr('\000a')||
 'end if;'||unistr('\000a')||
 ''||unistr('\000a')||
 '-- Y AXIS'||unistr('\000a')||
-'ht'||
-'p.p(''        y: {'||unistr('\000a')||
+'htp.p(''        y: {'||unistr('\000a')||
 '            padding: {top:10, bottom:0}'');'||unistr('\000a')||
 '	if p_label_y is not null then '||unistr('\000a')||
 '		htp.p(''       , label: {'||unistr('\000a')||
@@ -326,22 +331,22 @@ wwv_flow_api.create_plugin (
 '        },'||unistr('\000a')||
 '        y: {'||unistr('\000a')||
 '            show: '' || p_show_grid_y || '''||unistr('\000a')||
-'			// lines: [{value: 500}, {value: 8'||
-'00, class: ''''grid800'''', text: ''''LABEL 800''''}]'||unistr('\000a')||
+'			// li'||
+'nes: [{value: 500}, {value: 800, class: ''''grid800'''', text: ''''LABEL 800''''}]'||unistr('\000a')||
 '        }'||unistr('\000a')||
 '    },'||unistr('\000a')||
 '    legend: {'||unistr('\000a')||
 '        position: '''''' || p_legend_position || '''''''||unistr('\000a')||
 '    },'||unistr('\000a')||
 '    transition: {'||unistr('\000a')||
-'        duration: 0'||unistr('\000a')||
+'        duration: 400'||unistr('\000a')||
 '    },'||unistr('\000a')||
 '    color: {'||unistr('\000a')||
 '        pattern: [''''#ea004d'''', ''''#000000'''', ''''#009cff'''', ''''#ffc600'''', ''''#a93aff'''', ''''#b78500'''', ''''#23a700'''', ''''#00dbce'''', ''''#ff77f7'''', ''''#ffd800'''']'||unistr('\000a')||
 '    }'');'||unistr('\000a')||
-'	-- Tooltips must be separated to be hidden/shown'||unistr('\000a')||
-'	'||
-'if 	p_show_tooltips = ''true'' then '||unistr('\000a')||
+'	-- Tooltips must be'||
+' separated to be hidden/shown'||unistr('\000a')||
+'	if 	p_show_tooltips = ''true'' then '||unistr('\000a')||
 '	htp.p('',    tooltip: {'||unistr('\000a')||
 '			show: '' || p_show_tooltips || '','||unistr('\000a')||
 '			grouped: true'||unistr('\000a')||
@@ -357,9 +362,9 @@ wwv_flow_api.create_plugin (
 ''||unistr('\000a')||
 'htp.p('' chart_'' || p_region.id || ''.hide(['' || l_hider || '']); '');'||unistr('\000a')||
 'htp.p('' chart_'' || p_region.id || ''.show(['' || l_hider || '']); '');'||unistr('\000a')||
-'htp.p(''		apex.jQuery(document).ready(function() {'||unistr('\000a')||
-'			apex.jQuery(''''#'||
-'TZC3_colfi_'' || p_region.id || '''''').change(function() {	'||unistr('\000a')||
+'htp.p(''		apex.jQuery(document).ready('||
+'function() {'||unistr('\000a')||
+'			apex.jQuery(''''#TZC3_colfi_'' || p_region.id || '''''').change(function() {	'||unistr('\000a')||
 '			  chart_''|| p_region.id || ''.hide();'||unistr('\000a')||
 '				if ( this.value == '''''''' ){'||unistr('\000a')||
 '						chart_''|| p_region.id || ''.show();'||unistr('\000a')||
@@ -369,14 +374,15 @@ wwv_flow_api.create_plugin (
 '				}'||unistr('\000a')||
 '			});'||unistr('\000a')||
 '		});'');'||unistr('\000a')||
+'		'||unistr('\000a')||
 'htp.p(''};'');'||unistr('\000a')||
 ''||unistr('\000a')||
 'htp.p(''</script>'');'||unistr('\000a')||
 ''||unistr('\000a')||
 'APEX_JAVASCRIPT.ADD_ONLOAD_CODE('||unistr('\000a')||
-'	p_code => ''TZchart_'' || p_region.id || ''_init();'','||unistr('\000a')||
-'	p_key  => ''TZchar'||
-'t_key_'' || p_region.id'||unistr('\000a')||
+'	p_code => ''TZchart_'' || p_region.id'||
+' || ''_init();'','||unistr('\000a')||
+'	p_key  => ''TZchart_key_'' || p_region.id'||unistr('\000a')||
 ');'||unistr('\000a')||
 ''||unistr('\000a')||
 '  RETURN NULL;	  '||unistr('\000a')||
@@ -400,9 +406,9 @@ wwv_flow_api.create_plugin (
  ,p_version_identifier => '1'
   );
 wwv_flow_api.create_plugin_attribute (
-  p_id => 4727326234898521963 + wwv_flow_api.g_id_offset
+  p_id => 7147681448200362747 + wwv_flow_api.g_id_offset
  ,p_flow_id => wwv_flow.g_flow_id
- ,p_plugin_id => 4724700323726361230 + wwv_flow_api.g_id_offset
+ ,p_plugin_id => 7145055537028202014 + wwv_flow_api.g_id_offset
  ,p_attribute_scope => 'COMPONENT'
  ,p_attribute_sequence => 1
  ,p_display_sequence => 10
@@ -414,9 +420,9 @@ wwv_flow_api.create_plugin_attribute (
  ,p_help_text => 'Define the height of your chart. Default value is 900. Use integer values for adjusting height.'
   );
 wwv_flow_api.create_plugin_attribute (
-  p_id => 4727334836414531936 + wwv_flow_api.g_id_offset
+  p_id => 7147690049716372720 + wwv_flow_api.g_id_offset
  ,p_flow_id => wwv_flow.g_flow_id
- ,p_plugin_id => 4724700323726361230 + wwv_flow_api.g_id_offset
+ ,p_plugin_id => 7145055537028202014 + wwv_flow_api.g_id_offset
  ,p_attribute_scope => 'COMPONENT'
  ,p_attribute_sequence => 2
  ,p_display_sequence => 20
@@ -427,9 +433,9 @@ wwv_flow_api.create_plugin_attribute (
  ,p_help_text => 'Define the width of your chart. Default value is Null. When this value is set to Null it adjusts the width of this chart to display all data.'
   );
 wwv_flow_api.create_plugin_attribute (
-  p_id => 4727343307933542555 + wwv_flow_api.g_id_offset
+  p_id => 7147698521235383339 + wwv_flow_api.g_id_offset
  ,p_flow_id => wwv_flow.g_flow_id
- ,p_plugin_id => 4724700323726361230 + wwv_flow_api.g_id_offset
+ ,p_plugin_id => 7145055537028202014 + wwv_flow_api.g_id_offset
  ,p_attribute_scope => 'COMPONENT'
  ,p_attribute_sequence => 3
  ,p_display_sequence => 30
@@ -441,25 +447,25 @@ wwv_flow_api.create_plugin_attribute (
  ,p_help_text => 'Set "Yes" to show labels for each entry in your chart. Default is "No". If set to "No", labels will be hidden.'
   );
 wwv_flow_api.create_plugin_attr_value (
-  p_id => 4727347810704543442 + wwv_flow_api.g_id_offset
+  p_id => 7147703024006384226 + wwv_flow_api.g_id_offset
  ,p_flow_id => wwv_flow.g_flow_id
- ,p_plugin_attribute_id => 4727343307933542555 + wwv_flow_api.g_id_offset
+ ,p_plugin_attribute_id => 7147698521235383339 + wwv_flow_api.g_id_offset
  ,p_display_sequence => 10
  ,p_display_value => 'Yes'
  ,p_return_value => 'true'
   );
 wwv_flow_api.create_plugin_attr_value (
-  p_id => 4727352112781544007 + wwv_flow_api.g_id_offset
+  p_id => 7147707326083384791 + wwv_flow_api.g_id_offset
  ,p_flow_id => wwv_flow.g_flow_id
- ,p_plugin_attribute_id => 4727343307933542555 + wwv_flow_api.g_id_offset
+ ,p_plugin_attribute_id => 7147698521235383339 + wwv_flow_api.g_id_offset
  ,p_display_sequence => 20
  ,p_display_value => 'No (default)'
  ,p_return_value => 'false'
   );
 wwv_flow_api.create_plugin_attribute (
-  p_id => 4727373006810561230 + wwv_flow_api.g_id_offset
+  p_id => 7147728220112402014 + wwv_flow_api.g_id_offset
  ,p_flow_id => wwv_flow.g_flow_id
- ,p_plugin_id => 4724700323726361230 + wwv_flow_api.g_id_offset
+ ,p_plugin_id => 7145055537028202014 + wwv_flow_api.g_id_offset
  ,p_attribute_scope => 'COMPONENT'
  ,p_attribute_sequence => 4
  ,p_display_sequence => 40
@@ -471,25 +477,25 @@ wwv_flow_api.create_plugin_attribute (
  ,p_help_text => 'Display X axis grid in your chart. If set to "Yes", your chart will contain light grid lines for your X axis.'
   );
 wwv_flow_api.create_plugin_attr_value (
-  p_id => 4727377509580561978 + wwv_flow_api.g_id_offset
+  p_id => 7147732722882402762 + wwv_flow_api.g_id_offset
  ,p_flow_id => wwv_flow.g_flow_id
- ,p_plugin_attribute_id => 4727373006810561230 + wwv_flow_api.g_id_offset
+ ,p_plugin_attribute_id => 7147728220112402014 + wwv_flow_api.g_id_offset
  ,p_display_sequence => 10
  ,p_display_value => 'Yes'
  ,p_return_value => 'true'
   );
 wwv_flow_api.create_plugin_attr_value (
-  p_id => 4727381811312562469 + wwv_flow_api.g_id_offset
+  p_id => 7147737024614403253 + wwv_flow_api.g_id_offset
  ,p_flow_id => wwv_flow.g_flow_id
- ,p_plugin_attribute_id => 4727373006810561230 + wwv_flow_api.g_id_offset
+ ,p_plugin_attribute_id => 7147728220112402014 + wwv_flow_api.g_id_offset
  ,p_display_sequence => 20
  ,p_display_value => 'No (default)'
  ,p_return_value => 'false'
   );
 wwv_flow_api.create_plugin_attribute (
-  p_id => 4727394511789572123 + wwv_flow_api.g_id_offset
+  p_id => 7147749725091412907 + wwv_flow_api.g_id_offset
  ,p_flow_id => wwv_flow.g_flow_id
- ,p_plugin_id => 4724700323726361230 + wwv_flow_api.g_id_offset
+ ,p_plugin_id => 7145055537028202014 + wwv_flow_api.g_id_offset
  ,p_attribute_scope => 'COMPONENT'
  ,p_attribute_sequence => 5
  ,p_display_sequence => 50
@@ -501,25 +507,25 @@ wwv_flow_api.create_plugin_attribute (
  ,p_help_text => 'Display Y axis grid in your chart. If set to "Yes", your chart will contain light grid lines for your Y axis.'
   );
 wwv_flow_api.create_plugin_attr_value (
-  p_id => 4727399013867572750 + wwv_flow_api.g_id_offset
+  p_id => 7147754227169413534 + wwv_flow_api.g_id_offset
  ,p_flow_id => wwv_flow.g_flow_id
- ,p_plugin_attribute_id => 4727394511789572123 + wwv_flow_api.g_id_offset
+ ,p_plugin_attribute_id => 7147749725091412907 + wwv_flow_api.g_id_offset
  ,p_display_sequence => 10
  ,p_display_value => 'Yes (default)'
  ,p_return_value => 'true'
   );
 wwv_flow_api.create_plugin_attr_value (
-  p_id => 4727404015945573323 + wwv_flow_api.g_id_offset
+  p_id => 7147759229247414107 + wwv_flow_api.g_id_offset
  ,p_flow_id => wwv_flow.g_flow_id
- ,p_plugin_attribute_id => 4727394511789572123 + wwv_flow_api.g_id_offset
+ ,p_plugin_attribute_id => 7147749725091412907 + wwv_flow_api.g_id_offset
  ,p_display_sequence => 20
  ,p_display_value => 'No'
  ,p_return_value => 'false'
   );
 wwv_flow_api.create_plugin_attribute (
-  p_id => 4727417014344582264 + wwv_flow_api.g_id_offset
+  p_id => 7147772227646423048 + wwv_flow_api.g_id_offset
  ,p_flow_id => wwv_flow.g_flow_id
- ,p_plugin_id => 4724700323726361230 + wwv_flow_api.g_id_offset
+ ,p_plugin_id => 7145055537028202014 + wwv_flow_api.g_id_offset
  ,p_attribute_scope => 'COMPONENT'
  ,p_attribute_sequence => 6
  ,p_display_sequence => 60
@@ -531,25 +537,25 @@ wwv_flow_api.create_plugin_attribute (
  ,p_help_text => 'Enable Tooltips for each entry in your chart. Values wil be displayed in tooltips. If set to "yes" you are able to change further settings.'
   );
 wwv_flow_api.create_plugin_attr_value (
-  p_id => 4727421516422582892 + wwv_flow_api.g_id_offset
+  p_id => 7147776729724423676 + wwv_flow_api.g_id_offset
  ,p_flow_id => wwv_flow.g_flow_id
- ,p_plugin_attribute_id => 4727417014344582264 + wwv_flow_api.g_id_offset
+ ,p_plugin_attribute_id => 7147772227646423048 + wwv_flow_api.g_id_offset
  ,p_display_sequence => 10
  ,p_display_value => 'Yes (default)'
  ,p_return_value => 'true'
   );
 wwv_flow_api.create_plugin_attr_value (
-  p_id => 4727425818154583454 + wwv_flow_api.g_id_offset
+  p_id => 7147781031456424238 + wwv_flow_api.g_id_offset
  ,p_flow_id => wwv_flow.g_flow_id
- ,p_plugin_attribute_id => 4727417014344582264 + wwv_flow_api.g_id_offset
+ ,p_plugin_attribute_id => 7147772227646423048 + wwv_flow_api.g_id_offset
  ,p_display_sequence => 20
  ,p_display_value => 'No'
  ,p_return_value => 'false'
   );
 wwv_flow_api.create_plugin_attribute (
-  p_id => 4732411607854856526 + wwv_flow_api.g_id_offset
+  p_id => 7152766821156697310 + wwv_flow_api.g_id_offset
  ,p_flow_id => wwv_flow.g_flow_id
- ,p_plugin_id => 4724700323726361230 + wwv_flow_api.g_id_offset
+ ,p_plugin_id => 7145055537028202014 + wwv_flow_api.g_id_offset
  ,p_attribute_scope => 'COMPONENT'
  ,p_attribute_sequence => 7
  ,p_display_sequence => 50
@@ -569,9 +575,9 @@ wwv_flow_api.create_plugin_attribute (
 '[''your_column_3'', ''your_column_4'', ''your_column_5'']<br />'
   );
 wwv_flow_api.create_plugin_attribute (
-  p_id => 4727565911022666572 + wwv_flow_api.g_id_offset
+  p_id => 7147921124324507356 + wwv_flow_api.g_id_offset
  ,p_flow_id => wwv_flow.g_flow_id
- ,p_plugin_id => 4724700323726361230 + wwv_flow_api.g_id_offset
+ ,p_plugin_id => 7145055537028202014 + wwv_flow_api.g_id_offset
  ,p_attribute_scope => 'COMPONENT'
  ,p_attribute_sequence => 8
  ,p_display_sequence => 31
@@ -582,9 +588,9 @@ wwv_flow_api.create_plugin_attribute (
  ,p_help_text => 'If your SQL statement contains a column for labels of X axis datapoints you are able to set it. All of this columns containing values will be used to set the names of your X axis points.'
   );
 wwv_flow_api.create_plugin_attribute (
-  p_id => 4730706509662361955 + wwv_flow_api.g_id_offset
+  p_id => 7151061722964202739 + wwv_flow_api.g_id_offset
  ,p_flow_id => wwv_flow.g_flow_id
- ,p_plugin_id => 4724700323726361230 + wwv_flow_api.g_id_offset
+ ,p_plugin_id => 7145055537028202014 + wwv_flow_api.g_id_offset
  ,p_attribute_scope => 'COMPONENT'
  ,p_attribute_sequence => 9
  ,p_display_sequence => 32
@@ -596,9 +602,9 @@ wwv_flow_api.create_plugin_attribute (
  ,p_help_text => 'Enter a short description which will be added to your X axis. This label will be displayed behind the labels for ticks of your X axis'
   );
 wwv_flow_api.create_plugin_attribute (
-  p_id => 4728252325998002019 + wwv_flow_api.g_id_offset
+  p_id => 7148607539299842803 + wwv_flow_api.g_id_offset
  ,p_flow_id => wwv_flow.g_flow_id
- ,p_plugin_id => 4724700323726361230 + wwv_flow_api.g_id_offset
+ ,p_plugin_id => 7145055537028202014 + wwv_flow_api.g_id_offset
  ,p_attribute_scope => 'COMPONENT'
  ,p_attribute_sequence => 10
  ,p_display_sequence => 55
@@ -610,33 +616,33 @@ wwv_flow_api.create_plugin_attribute (
  ,p_help_text => 'Set the position of your chart''s legend. Possible values are Bottom, Right and Inset.'
   );
 wwv_flow_api.create_plugin_attr_value (
-  p_id => 4728256828075002667 + wwv_flow_api.g_id_offset
+  p_id => 7148612041376843451 + wwv_flow_api.g_id_offset
  ,p_flow_id => wwv_flow.g_flow_id
- ,p_plugin_attribute_id => 4728252325998002019 + wwv_flow_api.g_id_offset
+ ,p_plugin_attribute_id => 7148607539299842803 + wwv_flow_api.g_id_offset
  ,p_display_sequence => 10
  ,p_display_value => 'Bottom'
  ,p_return_value => 'bottom'
   );
 wwv_flow_api.create_plugin_attr_value (
-  p_id => 4728261129807003144 + wwv_flow_api.g_id_offset
+  p_id => 7148616343108843928 + wwv_flow_api.g_id_offset
  ,p_flow_id => wwv_flow.g_flow_id
- ,p_plugin_attribute_id => 4728252325998002019 + wwv_flow_api.g_id_offset
+ ,p_plugin_attribute_id => 7148607539299842803 + wwv_flow_api.g_id_offset
  ,p_display_sequence => 20
  ,p_display_value => 'Right (default)'
  ,p_return_value => 'right'
   );
 wwv_flow_api.create_plugin_attr_value (
-  p_id => 4728265431885003749 + wwv_flow_api.g_id_offset
+  p_id => 7148620645186844533 + wwv_flow_api.g_id_offset
  ,p_flow_id => wwv_flow.g_flow_id
- ,p_plugin_attribute_id => 4728252325998002019 + wwv_flow_api.g_id_offset
+ ,p_plugin_attribute_id => 7148607539299842803 + wwv_flow_api.g_id_offset
  ,p_display_sequence => 30
  ,p_display_value => 'Inset'
  ,p_return_value => 'inset'
   );
 wwv_flow_api.create_plugin_attribute (
-  p_id => 4728952209439895158 + wwv_flow_api.g_id_offset
+  p_id => 7149307422741735942 + wwv_flow_api.g_id_offset
  ,p_flow_id => wwv_flow.g_flow_id
- ,p_plugin_id => 4724700323726361230 + wwv_flow_api.g_id_offset
+ ,p_plugin_id => 7145055537028202014 + wwv_flow_api.g_id_offset
  ,p_attribute_scope => 'COMPONENT'
  ,p_attribute_sequence => 11
  ,p_display_sequence => 130
@@ -648,81 +654,81 @@ wwv_flow_api.create_plugin_attribute (
  ,p_help_text => 'Change this value if you want to use a different default draw style than line. Line is the initial style for chart series. You can set up different styles for non default columns'
   );
 wwv_flow_api.create_plugin_attr_value (
-  p_id => 4728956813595896342 + wwv_flow_api.g_id_offset
+  p_id => 7149312026897737126 + wwv_flow_api.g_id_offset
  ,p_flow_id => wwv_flow.g_flow_id
- ,p_plugin_attribute_id => 4728952209439895158 + wwv_flow_api.g_id_offset
+ ,p_plugin_attribute_id => 7149307422741735942 + wwv_flow_api.g_id_offset
  ,p_display_sequence => 10
  ,p_display_value => 'Bar (default)'
  ,p_return_value => 'bar'
   );
 wwv_flow_api.create_plugin_attr_value (
-  p_id => 4728961217058897331 + wwv_flow_api.g_id_offset
+  p_id => 7149316430360738115 + wwv_flow_api.g_id_offset
  ,p_flow_id => wwv_flow.g_flow_id
- ,p_plugin_attribute_id => 4728952209439895158 + wwv_flow_api.g_id_offset
+ ,p_plugin_attribute_id => 7149307422741735942 + wwv_flow_api.g_id_offset
  ,p_display_sequence => 20
  ,p_display_value => 'Line'
  ,p_return_value => 'line'
   );
 wwv_flow_api.create_plugin_attr_value (
-  p_id => 4728965519828898149 + wwv_flow_api.g_id_offset
+  p_id => 7149320733130738933 + wwv_flow_api.g_id_offset
  ,p_flow_id => wwv_flow.g_flow_id
- ,p_plugin_attribute_id => 4728952209439895158 + wwv_flow_api.g_id_offset
+ ,p_plugin_attribute_id => 7149307422741735942 + wwv_flow_api.g_id_offset
  ,p_display_sequence => 30
  ,p_display_value => 'Spline'
  ,p_return_value => 'spline'
   );
 wwv_flow_api.create_plugin_attr_value (
-  p_id => 4728969823638899185 + wwv_flow_api.g_id_offset
+  p_id => 7149325036940739969 + wwv_flow_api.g_id_offset
  ,p_flow_id => wwv_flow.g_flow_id
- ,p_plugin_attribute_id => 4728952209439895158 + wwv_flow_api.g_id_offset
+ ,p_plugin_attribute_id => 7149307422741735942 + wwv_flow_api.g_id_offset
  ,p_display_sequence => 40
  ,p_display_value => 'Area'
  ,p_return_value => 'area'
   );
 wwv_flow_api.create_plugin_attr_value (
-  p_id => 4728974128832900703 + wwv_flow_api.g_id_offset
+  p_id => 7149329342134741487 + wwv_flow_api.g_id_offset
  ,p_flow_id => wwv_flow.g_flow_id
- ,p_plugin_attribute_id => 4728952209439895158 + wwv_flow_api.g_id_offset
+ ,p_plugin_attribute_id => 7149307422741735942 + wwv_flow_api.g_id_offset
  ,p_display_sequence => 50
  ,p_display_value => 'Area-Spline'
  ,p_return_value => 'area'
   );
 wwv_flow_api.create_plugin_attr_value (
-  p_id => 4728978431949901584 + wwv_flow_api.g_id_offset
+  p_id => 7149333645251742368 + wwv_flow_api.g_id_offset
  ,p_flow_id => wwv_flow.g_flow_id
- ,p_plugin_attribute_id => 4728952209439895158 + wwv_flow_api.g_id_offset
+ ,p_plugin_attribute_id => 7149307422741735942 + wwv_flow_api.g_id_offset
  ,p_display_sequence => 60
  ,p_display_value => 'Scatter'
  ,p_return_value => 'scatter'
   );
 wwv_flow_api.create_plugin_attr_value (
-  p_id => 4728982737144903135 + wwv_flow_api.g_id_offset
+  p_id => 7149337950446743919 + wwv_flow_api.g_id_offset
  ,p_flow_id => wwv_flow.g_flow_id
- ,p_plugin_attribute_id => 4728952209439895158 + wwv_flow_api.g_id_offset
+ ,p_plugin_attribute_id => 7149307422741735942 + wwv_flow_api.g_id_offset
  ,p_display_sequence => 70
  ,p_display_value => 'Pie'
  ,p_return_value => 'pie'
   );
 wwv_flow_api.create_plugin_attr_value (
-  p_id => 4728987008531904308 + wwv_flow_api.g_id_offset
+  p_id => 7149342221833745092 + wwv_flow_api.g_id_offset
  ,p_flow_id => wwv_flow.g_flow_id
- ,p_plugin_attribute_id => 4728952209439895158 + wwv_flow_api.g_id_offset
+ ,p_plugin_attribute_id => 7149307422741735942 + wwv_flow_api.g_id_offset
  ,p_display_sequence => 80
  ,p_display_value => 'Donut'
  ,p_return_value => 'donut'
   );
 wwv_flow_api.create_plugin_attr_value (
-  p_id => 4728991413380905726 + wwv_flow_api.g_id_offset
+  p_id => 7149346626682746510 + wwv_flow_api.g_id_offset
  ,p_flow_id => wwv_flow.g_flow_id
- ,p_plugin_attribute_id => 4728952209439895158 + wwv_flow_api.g_id_offset
+ ,p_plugin_attribute_id => 7149307422741735942 + wwv_flow_api.g_id_offset
  ,p_display_sequence => 90
  ,p_display_value => 'Gauge'
  ,p_return_value => 'gauge'
   );
 wwv_flow_api.create_plugin_attribute (
-  p_id => 4730791622223422346 + wwv_flow_api.g_id_offset
+  p_id => 7151146835525263130 + wwv_flow_api.g_id_offset
  ,p_flow_id => wwv_flow.g_flow_id
- ,p_plugin_id => 4724700323726361230 + wwv_flow_api.g_id_offset
+ ,p_plugin_id => 7145055537028202014 + wwv_flow_api.g_id_offset
  ,p_attribute_scope => 'COMPONENT'
  ,p_attribute_sequence => 12
  ,p_display_sequence => 32
@@ -734,9 +740,9 @@ wwv_flow_api.create_plugin_attribute (
  ,p_help_text => 'Enter a short description which will be added to your Y axis. This label will be displayed behind the labels for ticks of your Y axis'
   );
 wwv_flow_api.create_plugin_attribute (
-  p_id => 4729527509710690076 + wwv_flow_api.g_id_offset
+  p_id => 7149882723012530860 + wwv_flow_api.g_id_offset
  ,p_flow_id => wwv_flow.g_flow_id
- ,p_plugin_id => 4724700323726361230 + wwv_flow_api.g_id_offset
+ ,p_plugin_id => 7145055537028202014 + wwv_flow_api.g_id_offset
  ,p_attribute_scope => 'COMPONENT'
  ,p_attribute_sequence => 13
  ,p_display_sequence => 130
@@ -748,9 +754,9 @@ wwv_flow_api.create_plugin_attribute (
  ,p_help_text => 'Activate this checkbox to display enhanced settings for chart columns.'
   );
 wwv_flow_api.create_plugin_attribute (
-  p_id => 4729750424067930764 + wwv_flow_api.g_id_offset
+  p_id => 7150105637369771548 + wwv_flow_api.g_id_offset
  ,p_flow_id => wwv_flow.g_flow_id
- ,p_plugin_id => 4724700323726361230 + wwv_flow_api.g_id_offset
+ ,p_plugin_id => 7145055537028202014 + wwv_flow_api.g_id_offset
  ,p_attribute_scope => 'COMPONENT'
  ,p_attribute_sequence => 14
  ,p_display_sequence => 140
@@ -762,7 +768,7 @@ wwv_flow_api.create_plugin_attribute (
  ,p_display_length => 130
  ,p_max_length => 4000
  ,p_is_translatable => false
- ,p_depending_on_attribute_id => 4729527509710690076 + wwv_flow_api.g_id_offset
+ ,p_depending_on_attribute_id => 7149882723012530860 + wwv_flow_api.g_id_offset
  ,p_depending_on_condition_type => 'EQUALS'
  ,p_depending_on_expression => 'Y'
  ,p_help_text => 'In this textfield you are able to place your own column types. You can describe als many columns you want. The structure must always be in this way:<br /><br />'||unistr('\000a')||
@@ -784,9 +790,9 @@ wwv_flow_api.create_plugin_attribute (
 'Be careful with column names! They MUST be written exactly in the way you wrote them in your SQL statment (case sensitive).'
   );
 wwv_flow_api.create_plugin_attribute (
-  p_id => 4730324822719233222 + wwv_flow_api.g_id_offset
+  p_id => 7150680036021074006 + wwv_flow_api.g_id_offset
  ,p_flow_id => wwv_flow.g_flow_id
- ,p_plugin_id => 4724700323726361230 + wwv_flow_api.g_id_offset
+ ,p_plugin_id => 7145055537028202014 + wwv_flow_api.g_id_offset
  ,p_attribute_scope => 'COMPONENT'
  ,p_attribute_sequence => 15
  ,p_display_sequence => 51
@@ -795,87 +801,22 @@ wwv_flow_api.create_plugin_attribute (
  ,p_is_required => false
  ,p_default_value => 'false'
  ,p_is_translatable => false
- ,p_help_text => 'X and Y axis can be rotated. If you select YES your chart will be rotated 90° to the right'
   );
 wwv_flow_api.create_plugin_attr_value (
-  p_id => 4730329425836234111 + wwv_flow_api.g_id_offset
+  p_id => 7150684639138074895 + wwv_flow_api.g_id_offset
  ,p_flow_id => wwv_flow.g_flow_id
- ,p_plugin_attribute_id => 4730324822719233222 + wwv_flow_api.g_id_offset
+ ,p_plugin_attribute_id => 7150680036021074006 + wwv_flow_api.g_id_offset
  ,p_display_sequence => 10
  ,p_display_value => 'Yes'
  ,p_return_value => 'true'
   );
 wwv_flow_api.create_plugin_attr_value (
-  p_id => 4730333731376235710 + wwv_flow_api.g_id_offset
+  p_id => 7150688944678076494 + wwv_flow_api.g_id_offset
  ,p_flow_id => wwv_flow.g_flow_id
- ,p_plugin_attribute_id => 4730324822719233222 + wwv_flow_api.g_id_offset
+ ,p_plugin_attribute_id => 7150680036021074006 + wwv_flow_api.g_id_offset
  ,p_display_sequence => 20
  ,p_display_value => 'No (default)'
  ,p_return_value => 'false'
-  );
-null;
- 
-end;
-/
-
- 
-begin
- 
-wwv_flow_api.g_varchar2_table := wwv_flow_api.empty_varchar2_table;
-wwv_flow_api.g_varchar2_table(1) := '0A4150455820506C7567696E0D0A0D0A0A0A546865204D4954204C6963656E736520284D4954290D0A0A436F707972696768742028632920323031352C2054686F6D6173205A69656C62617565720D0A0D0A0A5065726D697373696F6E20697320686572';
-wwv_flow_api.g_varchar2_table(2) := '656279206772616E7465642C2066726565206F66206368617267652C20746F20616E7920706572736F6E206F627461696E696E67206120636F7079206F660A7468697320736F66747761726520616E64206173736F63696174656420646F63756D656E74';
-wwv_flow_api.g_varchar2_table(3) := '6174696F6E2066696C657320287468652022536F66747761726522292C20746F206465616C20696E0A74686520536F66747761726520776974686F7574207265737472696374696F6E2C20696E636C7564696E6720776974686F7574206C696D69746174';
-wwv_flow_api.g_varchar2_table(4) := '696F6E207468652072696768747320746F0A7573652C20636F70792C206D6F646966792C206D657267652C207075626C6973682C20646973747269627574652C207375626C6963656E73652C20616E642F6F722073656C6C20636F70696573206F660A74';
-wwv_flow_api.g_varchar2_table(5) := '686520536F6674776172652C20616E6420746F207065726D697420706572736F6E7320746F2077686F6D2074686520536F667477617265206973206675726E697368656420746F20646F20736F2C0A7375626A65637420746F2074686520666F6C6C6F77';
-wwv_flow_api.g_varchar2_table(6) := '696E6720636F6E646974696F6E733A0A0A5468652061626F766520636F70797269676874206E6F7469636520616E642074686973207065726D697373696F6E206E6F74696365207368616C6C20626520696E636C7564656420696E20616C6C0A636F7069';
-wwv_flow_api.g_varchar2_table(7) := '6573206F72207375627374616E7469616C20706F7274696F6E73206F662074686520536F6674776172652E0A0A54484520534F4654574152452049532050524F564944454420224153204953222C20574954484F55542057415252414E5459204F462041';
-wwv_flow_api.g_varchar2_table(8) := '4E59204B494E442C2045585052455353204F520A494D504C4945442C20494E434C5544494E4720425554204E4F54204C494D4954454420544F205448452057415252414E54494553204F46204D45524348414E544142494C4954592C204649544E455353';
-wwv_flow_api.g_varchar2_table(9) := '0A464F52204120504152544943554C415220505552504F534520414E44204E4F4E494E4652494E47454D454E542E20494E204E4F204556454E54205348414C4C2054484520415554484F5253204F520A434F5059524947485420484F4C44455253204245';
-wwv_flow_api.g_varchar2_table(10) := '204C4941424C4520464F5220414E5920434C41494D2C2044414D41474553204F52204F54484552204C494142494C4954592C20574845544845520A494E20414E20414354494F4E204F4620434F4E54524143542C20544F5254204F52204F544845525749';
-wwv_flow_api.g_varchar2_table(11) := '53452C2041524953494E472046524F4D2C204F5554204F46204F5220494E0A434F4E4E454354494F4E20574954482054484520534F465457415245204F522054484520555345204F52204F54484552204445414C494E475320494E2054484520534F4654';
-wwv_flow_api.g_varchar2_table(12) := '574152452E0D0A0D0A0A0A0A0A0A2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D0A0A0A0A0A0D';
-wwv_flow_api.g_varchar2_table(13) := '0A0D0A44330D0A0D0A0A0A436F707972696768742028632920323031302D323031342C204D69636861656C20426F73746F636B0D0A0D0A0A416C6C207269676874732072657365727665642E0A0A5265646973747269627574696F6E20616E6420757365';
-wwv_flow_api.g_varchar2_table(14) := '20696E20736F7572636520616E642062696E61727920666F726D732C2077697468206F7220776974686F75740A6D6F64696669636174696F6E2C20617265207065726D69747465642070726F766964656420746861742074686520666F6C6C6F77696E67';
-wwv_flow_api.g_varchar2_table(15) := '20636F6E646974696F6E7320617265206D65743A0A0A2A205265646973747269627574696F6E73206F6620736F7572636520636F6465206D7573742072657461696E207468652061626F766520636F70797269676874206E6F746963652C20746869730A';
-wwv_flow_api.g_varchar2_table(16) := '20206C697374206F6620636F6E646974696F6E7320616E642074686520666F6C6C6F77696E6720646973636C61696D65722E0A0A2A205265646973747269627574696F6E7320696E2062696E61727920666F726D206D75737420726570726F6475636520';
-wwv_flow_api.g_varchar2_table(17) := '7468652061626F766520636F70797269676874206E6F746963652C0A202074686973206C697374206F6620636F6E646974696F6E7320616E642074686520666F6C6C6F77696E6720646973636C61696D657220696E2074686520646F63756D656E746174';
-wwv_flow_api.g_varchar2_table(18) := '696F6E0A2020616E642F6F72206F74686572206D6174657269616C732070726F766964656420776974682074686520646973747269627574696F6E2E0A0A2A20546865206E616D65204D69636861656C20426F73746F636B206D6179206E6F7420626520';
-wwv_flow_api.g_varchar2_table(19) := '7573656420746F20656E646F727365206F722070726F6D6F74652070726F64756374730A2020646572697665642066726F6D207468697320736F66747761726520776974686F7574207370656369666963207072696F72207772697474656E207065726D';
-wwv_flow_api.g_varchar2_table(20) := '697373696F6E2E0A0A5448495320534F4654574152452049532050524F56494445442042592054484520434F5059524947485420484F4C4445525320414E4420434F4E5452494255544F525320224153204953220A414E4420414E592045585052455353';
-wwv_flow_api.g_varchar2_table(21) := '204F5220494D504C4945442057415252414E544945532C20494E434C5544494E472C20425554204E4F54204C494D4954454420544F2C205448450A494D504C4945442057415252414E54494553204F46204D45524348414E544142494C49545920414E44';
-wwv_flow_api.g_varchar2_table(22) := '204649544E45535320464F52204120504152544943554C415220505552504F5345204152450A444953434C41494D45442E20494E204E4F204556454E54205348414C4C204D49434841454C20424F53544F434B204245204C4941424C4520464F5220414E';
-wwv_flow_api.g_varchar2_table(23) := '59204449524543542C0A494E4449524543542C20494E434944454E54414C2C205350454349414C2C204558454D504C4152592C204F5220434F4E53455155454E5449414C2044414D414745532028494E434C5544494E472C0A425554204E4F54204C494D';
-wwv_flow_api.g_varchar2_table(24) := '4954454420544F2C2050524F435552454D454E54204F46205355425354495455544520474F4F4453204F522053455256494345533B204C4F5353204F46205553452C0A444154412C204F522050524F464954533B204F5220425553494E45535320494E54';
-wwv_flow_api.g_varchar2_table(25) := '455252555054494F4E2920484F57455645522043415553454420414E44204F4E20414E59205448454F52590A4F46204C494142494C4954592C205748455448455220494E20434F4E54524143542C20535452494354204C494142494C4954592C204F5220';
-wwv_flow_api.g_varchar2_table(26) := '544F52542028494E434C5544494E470A4E45474C4947454E4345204F52204F5448455257495345292041524953494E4720494E20414E5920574159204F5554204F462054484520555345204F46205448495320534F4654574152452C0A4556454E204946';
-wwv_flow_api.g_varchar2_table(27) := '2041445649534544204F462054484520504F53534942494C495459204F4620535543482044414D4147452E0A0A0A0A0A0D0A0D0A2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D';
-wwv_flow_api.g_varchar2_table(28) := '2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D2D0D0A0D0A0A0A0A0A43330A0A0D0A0D0A546865204D4954204C6963656E736520284D4954290D0A0A0A436F70797269676874202863292032303133204D61736179756B69';
-wwv_flow_api.g_varchar2_table(29) := '2054616E616B610D0A0D0A0A0A5065726D697373696F6E20697320686572656279206772616E7465642C2066726565206F66206368617267652C20746F20616E7920706572736F6E206F627461696E696E67206120636F7079206F660A7468697320736F';
-wwv_flow_api.g_varchar2_table(30) := '66747761726520616E64206173736F63696174656420646F63756D656E746174696F6E2066696C657320287468652022536F66747761726522292C20746F206465616C20696E0A74686520536F66747761726520776974686F7574207265737472696374';
-wwv_flow_api.g_varchar2_table(31) := '696F6E2C20696E636C7564696E6720776974686F7574206C696D69746174696F6E207468652072696768747320746F0A7573652C20636F70792C206D6F646966792C206D657267652C207075626C6973682C20646973747269627574652C207375626C69';
-wwv_flow_api.g_varchar2_table(32) := '63656E73652C20616E642F6F722073656C6C20636F70696573206F660A74686520536F6674776172652C20616E6420746F207065726D697420706572736F6E7320746F2077686F6D2074686520536F667477617265206973206675726E69736865642074';
-wwv_flow_api.g_varchar2_table(33) := '6F20646F20736F2C0A7375626A65637420746F2074686520666F6C6C6F77696E6720636F6E646974696F6E733A0A0A5468652061626F766520636F70797269676874206E6F7469636520616E642074686973207065726D697373696F6E206E6F74696365';
-wwv_flow_api.g_varchar2_table(34) := '207368616C6C20626520696E636C7564656420696E20616C6C0A636F70696573206F72207375627374616E7469616C20706F7274696F6E73206F662074686520536F6674776172652E0A0A54484520534F4654574152452049532050524F564944454420';
-wwv_flow_api.g_varchar2_table(35) := '224153204953222C20574954484F55542057415252414E5459204F4620414E59204B494E442C2045585052455353204F520A494D504C4945442C20494E434C5544494E4720425554204E4F54204C494D4954454420544F205448452057415252414E5449';
-wwv_flow_api.g_varchar2_table(36) := '4553204F46204D45524348414E544142494C4954592C204649544E4553530A464F52204120504152544943554C415220505552504F534520414E44204E4F4E494E4652494E47454D454E542E20494E204E4F204556454E54205348414C4C205448452041';
-wwv_flow_api.g_varchar2_table(37) := '5554484F5253204F520A434F5059524947485420484F4C44455253204245204C4941424C4520464F5220414E5920434C41494D2C2044414D41474553204F52204F54484552204C494142494C4954592C20574845544845520A494E20414E20414354494F';
-wwv_flow_api.g_varchar2_table(38) := '4E204F4620434F4E54524143542C20544F5254204F52204F54484552574953452C2041524953494E472046524F4D2C204F5554204F46204F5220494E0A434F4E4E454354494F4E20574954482054484520534F465457415245204F522054484520555345';
-wwv_flow_api.g_varchar2_table(39) := '204F52204F54484552204445414C494E475320494E2054484520534F4654574152452E0A';
-null;
- 
-end;
-/
-
- 
-begin
- 
-wwv_flow_api.create_plugin_file (
-  p_id => 2367967926885537928 + wwv_flow_api.g_id_offset
- ,p_flow_id => wwv_flow.g_flow_id
- ,p_plugin_id => 4724700323726361230 + wwv_flow_api.g_id_offset
- ,p_file_name => 'LICENSE.txt'
- ,p_mime_type => 'text/plain'
- ,p_file_content => wwv_flow_api.g_varchar2_table
   );
 null;
  
@@ -2411,9 +2352,9 @@ end;
 begin
  
 wwv_flow_api.create_plugin_file (
-  p_id => 4732807122271445889 + wwv_flow_api.g_id_offset
+  p_id => 7153162335573286673 + wwv_flow_api.g_id_offset
  ,p_flow_id => wwv_flow.g_flow_id
- ,p_plugin_id => 4724700323726361230 + wwv_flow_api.g_id_offset
+ ,p_plugin_id => 7145055537028202014 + wwv_flow_api.g_id_offset
  ,p_file_name => 'd3-3.5.3.min.js'
  ,p_mime_type => 'application/x-javascript'
  ,p_file_content => wwv_flow_api.g_varchar2_table
@@ -3786,9 +3727,9 @@ end;
 begin
  
 wwv_flow_api.create_plugin_file (
-  p_id => 4732815614076449677 + wwv_flow_api.g_id_offset
+  p_id => 7153170827378290461 + wwv_flow_api.g_id_offset
  ,p_flow_id => wwv_flow.g_flow_id
- ,p_plugin_id => 4724700323726361230 + wwv_flow_api.g_id_offset
+ ,p_plugin_id => 7145055537028202014 + wwv_flow_api.g_id_offset
  ,p_file_name => 'c3.min.js'
  ,p_mime_type => 'application/x-javascript'
  ,p_file_content => wwv_flow_api.g_varchar2_table
@@ -3840,9 +3781,9 @@ end;
 begin
  
 wwv_flow_api.create_plugin_file (
-  p_id => 4732828420385644273 + wwv_flow_api.g_id_offset
+  p_id => 7153183633687485057 + wwv_flow_api.g_id_offset
  ,p_flow_id => wwv_flow.g_flow_id
- ,p_plugin_id => 4724700323726361230 + wwv_flow_api.g_id_offset
+ ,p_plugin_id => 7145055537028202014 + wwv_flow_api.g_id_offset
  ,p_file_name => 'c3.css'
  ,p_mime_type => 'text/css'
  ,p_file_content => wwv_flow_api.g_varchar2_table
